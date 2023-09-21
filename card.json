@@ -1,0 +1,29 @@
+import json
+import csv
+
+# Load JSON data from a file
+with open(r'Users/carlou/Desktop/default-cards-20230530090638.json') as f:
+    data = json.load(f)
+
+# Open (or create) a CSV file and write to it
+with open(r'Users/carlou/Desktop/cards.csv', 'w', newline='') as f:
+    writer = csv.writer(f)
+    # Write header
+    writer.writerow(['name', 'image_link', 'set_name', 'color_identity', 'cmc', 'rarity'])
+
+    # Iterate over each card in the list
+    for card in data:
+        # Check if 'image_uris' field exists in the card
+        if 'image_uris' in card:
+            image_link = card['image_uris']['normal']
+        else:
+            image_link = ''  # use an empty string if 'image_uris' does not exist
+
+        # Extract cmc
+        cmc = card.get('cmc', '')  # If cmc does not exist, default to empty string.
+
+        # Extract rarity
+        rarity = card.get('rarity', '')  # If rarity does not exist, default to empty string.
+
+        # Write data for each card
+        writer.writerow([card['name'], image_link, card['set_name'], ', '.join(card['color_identity']), cmc, rarity])
